@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func initLogger(callerOptions *CallerOptions) (*logrus.Logger, *bytes.Buffer) {
+func initLoggerWithCallerHook(callerOptions *CallerOptions) (*logrus.Logger, *bytes.Buffer) {
 	reader := new(bytes.Buffer)
 	logger := &logrus.Logger{
 		Out:       reader,
@@ -26,7 +26,7 @@ func initLogger(callerOptions *CallerOptions) (*logrus.Logger, *bytes.Buffer) {
 
 func TestCallerWithDefaultOptions(t *testing.T) {
 	// initialization
-	logger, reader := initLogger(DefaultCallerOptions)
+	logger, reader := initLoggerWithCallerHook(DefaultCallerOptions)
 
 	// expectations
 	// /!\ watch out !! There is currently 5 lines difference between caller and test
@@ -49,7 +49,7 @@ func TestCallerWithDefaultOptions(t *testing.T) {
 func TestCallerWithCustomOptions(t *testing.T) {
 	// initialization
 	appPackage := "logrushooks"
-	logger, reader := initLogger(&CallerOptions{
+	logger, reader := initLoggerWithCallerHook(&CallerOptions{
 		AppPackage: appPackage,
 		CallerKey:  "test",
 	})
@@ -100,7 +100,7 @@ func TestCallerWithBadCustomOptions(t *testing.T) {
 
 func TestCallerWithCallerError(t *testing.T) {
 	// initialization
-	logger, reader := initLogger(&CallerOptions{
+	logger, reader := initLoggerWithCallerHook(&CallerOptions{
 		CallerSkipStart: 100, // impossible value for the runtime.Caller to resolve
 	})
 

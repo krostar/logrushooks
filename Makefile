@@ -68,12 +68,16 @@ test-dep: ## Check for useless and/or missing dependencies
 
 .PHONY: test
 test: ## Run the unit/functionnal tests
-	mkdir -p $(DIR_COVERAGE)
+	@mkdir -p $(DIR_COVERAGE)
 	@echo 'mode: atomic' > $(DIR_COVERAGE)/coverage.txt
 	go test -covermode=atomic -coverprofile=$(DIR_COVERAGE)/coverage.txt -v -race -timeout=30s $(BUILD_TAGS) $(PACKAGES)
 
-.PHONY: test-all
-test-all: test-lint test-dep test ## Run all kind of tests (code quality, missing dependencies, units, functionnal)
+.PHONY: tests
+tests: test-lint test-dep test ## Run all kind of tests (code quality, missing dependencies, units, functionnal)
+
+.PHONY: benchmark
+benchmark: ## Run benchmark
+	go test -v -bench=. -benchtime=1m ./...
 
 .PHONY: cover
 cover: test ## Run tests to compute coverage and open the coverage report
@@ -87,7 +91,7 @@ clean: ## Remove vendors, build, and temporary files
 	go clean
 
 .PHONY: ci
-ci: setup test-dep test-lint test ## Useful alias for CI
+ci: setup tests ## Useful alias for CI
 
 # Absolutely awesome: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 .PHONY: help

@@ -6,7 +6,7 @@ __logrushooks__ is a project containing few hooks to plug to logrus to add some 
 
 ## Hooks
 
-Actually there is only one hooks, but more may be added soon.
 Here the list of all hooks:
 
+- [FieldsHook](https://github.com/krostar/logrushooks/blob/master/README_FIELDS.md)
 - [CallerHook](https://github.com/krostar/logrushooks/blob/master/README_CALLER.md)
